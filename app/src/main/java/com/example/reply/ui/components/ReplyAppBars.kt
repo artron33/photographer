@@ -1,5 +1,6 @@
 package com.example.reply.ui.components
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,7 +26,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -41,14 +41,16 @@ import com.example.reply.data.photographer.Photographer
 fun ReplyDockedSearchBar(
     photographers: List<Photographer>,
     onSearchItemSelected: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isSearching: Boolean
 ) {
     var query by remember { mutableStateOf("") }
     var active by remember { mutableStateOf(false) }
     var isFavorite by remember { mutableStateOf(true) }
+//    var isArrowBack by remember { mutableStateOf(photographers.isNotEmpty() && query.isNotEmpty()) }
+    var isArrowBack by remember { mutableStateOf(active || isFavorite.not()) }
 
     LaunchedEffect(query) {
-        //searchResults.clear()
         if (query.isNotEmpty()) {
             onSearchItemSelected.invoke(query)
             isFavorite = false
@@ -72,7 +74,12 @@ fun ReplyDockedSearchBar(
         },
         placeholder = { Text(text = stringResource(id = R.string.search_emails)) },
         leadingIcon = {
-            if (active || isFavorite.not()) {
+            Log.e("yallah", "azeaze photographers: ${photographers.size}")
+            Log.e("yallah", "azeaze photographers: ${photographers.isNullOrEmpty()}")
+//            if (active || isFavorite.not()) {
+//            if (photographers.isNullOrEmpty().not()) {
+//            if (isArrowBack) {
+            if (isSearching) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
                     contentDescription = stringResource(id = R.string.back_button),
@@ -100,12 +107,13 @@ fun ReplyDockedSearchBar(
                 contentPadding = PaddingValues(16.dp),
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
+                isArrowBack = true
                 items(items = photographers, key = { it.id ?: 0 }) { email ->
                     ListItem(
-                        headlineContent = { Text(text = email.photographer ?: "", maxLines = 1) },
+                        headlineContent = { Text(text = email.photographer, maxLines = 1) },
                         supportingContent = {
                             Text(
-                                text = email.photographer_url ?: "",
+                                text = email.photographer_url,
                                 maxLines = 1
                             )
                         },
@@ -138,7 +146,7 @@ fun ReplyDockedSearchBar(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EmailDetailAppBar(
-    email: List<Photographer>,
+    photographer: Photographer,
     isFullScreen: Boolean,
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit
@@ -151,39 +159,37 @@ fun EmailDetailAppBar(
         title = {
             Column(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = if (isFullScreen) Alignment.CenterHorizontally
-                else Alignment.Start
+                horizontalAlignment = Alignment.Start
             ) {
                 Text(
-//                    text = email.photographer ?: "",
-                    text = "Search",
+                    text = photographer.photographer,
+//                    text =  "Search",
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
-                Text(
-                    modifier = Modifier.padding(top = 4.dp),
-                    text = "${stringResource(id = R.string.messages)}",
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.outline
-                )
+//                Text(
+//                    modifier = Modifier.padding(top = 4.dp),
+////                    text = "${stringResource(id = R.string.messages)}",
+//                    text = photographer.,
+//                    style = MaterialTheme.typography.labelMedium,
+//                    color = MaterialTheme.colorScheme.outline
+//                )
             }
         },
         navigationIcon = {
-            if (isFullScreen) {
-                FilledIconButton(
-                    onClick = onBackPressed,
-                    modifier = Modifier.padding(8.dp),
-                    colors = IconButtonDefaults.filledIconButtonColors(
-                        containerColor = MaterialTheme.colorScheme.surface,
-                        contentColor = MaterialTheme.colorScheme.onSurface
-                    )
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.ArrowBack,
-                        contentDescription = stringResource(id = R.string.back_button),
-                        modifier = Modifier.size(14.dp)
-                    )
-                }
+            FilledIconButton(
+                onClick = onBackPressed,
+                modifier = Modifier.padding(8.dp),
+                colors = IconButtonDefaults.filledIconButtonColors(
+                    containerColor = MaterialTheme.colorScheme.surface,
+                    contentColor = MaterialTheme.colorScheme.onSurface
+                )
+            ) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = stringResource(id = R.string.back_button),
+                    modifier = Modifier.size(14.dp)
+                )
             }
         },
     )

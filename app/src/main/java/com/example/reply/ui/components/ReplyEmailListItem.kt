@@ -3,6 +3,7 @@ package com.example.reply.ui.components
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -37,7 +38,8 @@ fun ReplyEmailListItem(
     photographer: Photographer,
     navigateToDetail: (String) -> Unit,
     modifier: Modifier = Modifier,
-    controlFavorite: (Favorite) -> Unit
+    controlFavorite: (Photographer) -> Boolean,
+    openDetailScreen: (Photographer?) -> Unit
 ) {
     Card(
         modifier = modifier
@@ -45,11 +47,10 @@ fun ReplyEmailListItem(
             .height(300.dp)
             .fillMaxWidth()
             .clip(CardDefaults.shape)
-//            .combinedClickable(
+            .combinedClickable(
                 //todo: verify this
-//                onClick = { navigateToDetail(photographer) },
-//            )
-            .clip(CardDefaults.shape),
+                onClick = { openDetailScreen(photographer) },
+            ),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant
         )
@@ -72,37 +73,12 @@ fun ReplyEmailListItem(
                         .wrapContentHeight()
                         .fillMaxSize(),
                 )
-                IconButton(
-                    onClick = {
-                        controlFavorite.invoke(
-                            Favorite(
-                                    id = photographer.id,
-                                    width = photographer.width,
-                                    height = photographer.height,
-                                    url = photographer.url,
-                                    photographer = photographer.photographer,
-                                    photographer_url = photographer.photographer_url,
-                                    photographer_id = photographer.photographer_id,
-                                    avg_color = photographer.avg_color,
-                                    original = photographer.src.original,
-                                    medium = photographer.src.medium,
-                                    small = photographer.src.small,
-                                    landscape = photographer.src.landscape,
-                            )
-                        )
-                    },
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .clip(CircleShape)
-                        .align(Alignment.TopEnd)
-                        .background(MaterialTheme.colorScheme.surface)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.StarBorder,
-                        contentDescription = "Favorite",
-                        tint = MaterialTheme.colorScheme.outline
-                    )
-                }
+                extracted(controlFavorite, photographer, Modifier
+                    .padding(8.dp)
+                    .clip(CircleShape)
+                    .align(Alignment.TopEnd)
+                    .background(MaterialTheme.colorScheme.surface)
+                )
             }
 
             Text(

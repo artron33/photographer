@@ -20,7 +20,7 @@ fun ReplyProfileImage(
             data = drawableResource,
             builder = {
                 if (isRound) transformations(CircleCropTransformation())
-                crossfade(true)
+//                crossfade(true)
             }
         ),
         contentDescription = description,

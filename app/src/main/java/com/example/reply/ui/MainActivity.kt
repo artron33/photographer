@@ -22,11 +22,9 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             ReplyTheme {
-                val displayFeatures = calculateDisplayFeatures(this)
                 val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
                 ReplyApp(
-                    displayFeatures = displayFeatures,
                     replyHomeUIState = uiState,
                     controlFavorite = { favorite ->
                         viewModel.addFavorite(favorite)
@@ -49,7 +47,6 @@ class MainActivity : ComponentActivity() {
 fun ReplyAppPreview() {
     ReplyTheme {
         ReplyApp(
-            displayFeatures = emptyList(),
             replyHomeUIState = ReplyHomeUIState(),
         )
     }
@@ -61,7 +58,6 @@ fun ReplyAppPreview() {
 fun ReplyAppPreviewTablet() {
     ReplyTheme {
         ReplyApp(
-            displayFeatures = emptyList(),
             replyHomeUIState = ReplyHomeUIState(),
         )
     }
@@ -73,7 +69,6 @@ fun ReplyAppPreviewTablet() {
 fun ReplyAppPreviewTabletPortrait() {
     ReplyTheme {
         ReplyApp(
-            displayFeatures = emptyList(),
             replyHomeUIState = ReplyHomeUIState(),
         )
     }
@@ -85,7 +80,6 @@ fun ReplyAppPreviewTabletPortrait() {
 fun ReplyAppPreviewDesktopPortrait() {
     ReplyTheme {
         ReplyApp(
-            displayFeatures = emptyList(),
             replyHomeUIState = ReplyHomeUIState(),
         )
     }
