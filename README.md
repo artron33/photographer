@@ -37,6 +37,6 @@
 * J'ai ajouté un delay de 200ms avant de lancer une request reseau (quand on tape), afin d'éviter de faire trop de call unitile.
 * J'ai perdu trop de temps pour décider quel UI, pour faire du Dagger/Hilt/Koin
 * Les tests servent juste à montrer que je sais en faire, et je connais Mockito. Je sais qu'on fait souvent des tests d'UI avec compose, mais je n'en ai pas encore fait officiellement, alors j'ai pas "tenter" ici.
-* J'ai retiré les list_par_defaut (pour avoir de l'UI)
+* J'ai retiré les list_par_defaut (pour avoir la preview avec compose)
 
 
