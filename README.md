@@ -23,8 +23,8 @@
 
 | Input                               | Expected Result                     |
 |-------------------------------------|-------------------------------------|
-| Case 1                              | <img src="screenshots/poject.gif"/> |
-| img src="screenshots/state_1.png">  | <img src="screenshots/state_2.png"> |
+| -                                   | <img src="screenshots/poject.gif"/> |
+| <img src="screenshots/state_1.png"> | <img src="screenshots/state_2.png"> |
 | <img src="screenshots/state_3.png"> | <img src="screenshots/state_4.png"> |
 
 
