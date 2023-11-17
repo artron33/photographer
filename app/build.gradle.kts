@@ -100,6 +100,8 @@ android {
 }
 
 dependencies {
+    testImplementation("org.testng:testng:6.9.6")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
     val composeBom = platform(libs.androidx.compose.bom)
     implementation(composeBom)
     androidTestImplementation(composeBom)
@@ -129,6 +131,12 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
     implementation ("io.coil-kt:coil-compose:1.4.0")
+
+    testImplementation ("androidx.arch.core:core-testing:2.1.0")
+    testImplementation ("org.mockito:mockito-core:4.0.0")
+    testImplementation ("org.mockito:mockito-inline:4.0.0")
+    testImplementation ("org.mockito.kotlin:mockito-kotlin:4.0.0")
+
     // def room_version = "2.6.0"
 //    implementation ("androidx.room:room-runtime:$room_version")
 //    annotationProcessor ("androidx.room:room-compiler:$room_version")

@@ -9,9 +9,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 object RetrofitApp {
-//    HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-//    interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-
     private val APIKEY = "1Ae3i5BCPTcQUsJAuukK8lt7BD9rQsdRN4XQqxyNv050wFQEccl0czuL"
     private val AUTHORIZATION = "Authorization"
     private val URL = "https://api.pexels.com/v1/"

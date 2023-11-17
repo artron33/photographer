@@ -2,6 +2,8 @@ package com.example.reply.data.library.room
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.reply.data.photographer.Photographer
+import com.example.reply.data.photographer.Src
 
 @Entity(tableName = "favorite_table")
 data class Favorite(
@@ -18,7 +20,7 @@ data class Favorite(
         val medium:String= "https://images.pexels.com/photos/2014422/pexels-photo-2014422.jpeg?auto=compress&cs=tinysrgb&h=350",
         val small:String= "https://images.pexels.com/photos/2014422/pexels-photo-2014422.jpeg?auto=compress&cs=tinysrgb&h=130",
         val portrait:String= "https://images.pexels.com/photos/2014422/pexels-photo-2014422.jpeg?auto=compress&cs=tinysrgb&h=130",
-        val landscape:String,
-        val time: Long = System.currentTimeMillis(),
+        val landscape:String = "https://images.pexels.com/photos/2014422/pexels-photo-2014422.jpeg?auto=compress&cs=tinysrgb&h=130",
+        val time: Long = System.currentTimeMillis()
 )
 

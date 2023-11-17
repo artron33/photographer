@@ -1,6 +1,5 @@
 package com.example.reply.ui.components
 
-import android.util.Log
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -12,6 +11,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.StarBorder
+import androidx.compose.material.icons.filled.Stars
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.example.reply.data.photographer.Photographer
+import com.example.reply.ui.theme.transparent
 
 @OptIn(
     ExperimentalFoundationApi::class,
@@ -36,9 +37,8 @@ fun PhotographerFullScreen(
     photographer: Photographer,
     controlFavorite: (Photographer) -> Boolean,
 ) {
-
     Box {
-        ReplyProfileImage(
+        PhotographerImage(
             photographer.src.portrait,
             "photographer.sender.fullName32",
             modifier = Modifier
@@ -46,8 +46,7 @@ fun PhotographerFullScreen(
                 .fillMaxHeight(0.90f)
         )
 
-
-        extracted(controlFavorite, photographer, Modifier
+        favoriteIcon(controlFavorite, photographer, Modifier
             .padding(8.dp)
             .clip(CircleShape)
             .align(Alignment.TopEnd)
@@ -64,25 +63,30 @@ fun PhotographerFullScreen(
 }
 
 @Composable
-fun extracted(
-    controlFavorite: (Photographer) -> Boolean,
+fun favoriteIcon(
+    controlFavorite: ((Photographer) -> Boolean)?,
     photographer: Photographer,
     modifier: Modifier
 ) {
-    var isAdded by remember { mutableStateOf(photographer.isFavorite) }
-    Log.e("yallah", "isAdded isAdded isAdded ===== " + isAdded)
-    IconButton(
-        onClick = {
-            val lisAdded = controlFavorite.invoke(photographer)
-            Log.e("yallah", "isAdded = " + lisAdded)
-            isAdded = lisAdded
-        },
-        modifier = modifier
-    ) {
-        Icon(
-            imageVector = if (isAdded) Icons.Default.Star else Icons.Default.StarBorder,
-            contentDescription = "Favorite",
-            tint = MaterialTheme.colorScheme.outline
-        )
-    }
+//    if (controlFavorite != null) {
+        var isAdded by remember { mutableStateOf(photographer.isFavorite) }
+        IconButton(
+            onClick = { controlFavorite?.let { isAdded = it.invoke(photographer) } },
+            modifier = modifier
+        ) {
+            Icon(
+                imageVector = if (isAdded) Icons.Default.Star else Icons.Default.StarBorder,
+                contentDescription = "Favorite",
+                tint = MaterialTheme.colorScheme.outline
+            )
+        }
+//    } else {
+//        Icon(
+//            modifier = Modifier
+//                .background(transparent),
+//            imageVector = Icons.Default.Star,
+//            contentDescription = "Favorite",
+//            tint = MaterialTheme.colorScheme.outline
+//        )
+//    }
 }

@@ -16,7 +16,6 @@ class MainActivity : ComponentActivity() {
 
     private val viewModel: ReplyHomeViewModel by viewModels()
 
-    @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -26,22 +25,15 @@ class MainActivity : ComponentActivity() {
 
                 ReplyApp(
                     replyHomeUIState = uiState,
-                    controlFavorite = { favorite ->
-                        viewModel.addFavorite(favorite)
-                    },
-                    openDetailScreen = { photographer ->
-                        viewModel.openDetailScreen(photographer)
-                    },
-                    navigateToDetail = { emailId->
-                        viewModel.setOpenedEmail(emailId)
-                    },
+                    controlFavorite = viewModel::addFavorite,
+                    openDetailScreen = viewModel::openDetailScreen,
+                    searchPhotoWith = viewModel::searchPhotoBy,
                 )
             }
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Preview(showBackground = true)
 @Composable
 fun ReplyAppPreview() {
@@ -52,29 +44,6 @@ fun ReplyAppPreview() {
     }
 }
 
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
-@Preview(showBackground = true, widthDp = 700, heightDp = 500)
-@Composable
-fun ReplyAppPreviewTablet() {
-    ReplyTheme {
-        ReplyApp(
-            replyHomeUIState = ReplyHomeUIState(),
-        )
-    }
-}
-
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
-@Preview(showBackground = true, widthDp = 500, heightDp = 700)
-@Composable
-fun ReplyAppPreviewTabletPortrait() {
-    ReplyTheme {
-        ReplyApp(
-            replyHomeUIState = ReplyHomeUIState(),
-        )
-    }
-}
-
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Preview(showBackground = true, widthDp = 600, heightDp = 1100)
 @Composable
 fun ReplyAppPreviewDesktopPortrait() {

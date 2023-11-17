@@ -1,9 +1,11 @@
 package com.example.reply.data.photographer
 
-/**
- * An object which represents an account which can belong to a user. A single user can have
- * multiple accounts.
- */
+import com.example.reply.data.library.room.Favorite
+
+data class Photo(
+    val photos: List<Photographer> = mutableListOf()
+)
+
 data class Photographer(
     val id: Long? = 2L,
     val width: String = "",
@@ -16,7 +18,6 @@ data class Photographer(
     val src: Src = Src(),
     val isFavorite: Boolean
 )
-
 
 data class Src(
     val original: String = "https://images.pexels.com/photos/2014422/pexels-photo-2014422.jpeg",
