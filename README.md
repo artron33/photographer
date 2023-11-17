@@ -20,13 +20,23 @@
 
 ## Design & Screenshots
 
-
-| Input                               | Expected Result                     |
-|-------------------------------------|-------------------------------------|
 | -                                   | <img src="screenshots/poject.gif"/> |
+|-------------------------------------|-------------------------------------|
 | <img src="screenshots/state_1.png"> | <img src="screenshots/state_2.png"> |
 | <img src="screenshots/state_3.png"> | <img src="screenshots/state_4.png"> |
 
+## Details:
 
+* J'ai commencé par faire du multi-screen, en allant jusqu'au foldable.
+* J'ai finalement retiré tout ce code, pour simplifier la review du projet.
+
+* J'ai pas compris si on devait afficher le profile d'un user dans une webView ? (à partir de l'URL, ou juste afficher l'URL?)
+* J'ai trouvé que c'était + simple de fetch les favoris 1 fois au démarrage, que de garder un flow avec room, afin d'être notifié des changements d'état.
+  * Car je réutilise la meme UI pour les favoris et la recherche.
+  * Donc c'est + simple de call l'état que je veux afficher
+* J'ai ajouté un delay de 200ms avant de lancer une request reseau (quand on tape), afin d'éviter de faire trop de call unitile.
+* J'ai perdu trop de temps pour décider quel UI, pour faire du Dagger/Hilt/Koin
+* Les tests servent juste à montrer que je sais en faire, et je connais Mockito. Je sais qu'on fait souvent des tests d'UI avec compose, mais je n'en ai pas encore fait officiellement, alors j'ai pas "tenter" ici.
+* J'ai retiré les list_par_defaut (pour avoir de l'UI)
 
 
