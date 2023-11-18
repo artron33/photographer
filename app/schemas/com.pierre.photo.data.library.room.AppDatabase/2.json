@@ -1,17 +1,29 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 1,
-    "identityHash": "e61d47e42dab2b9e2c07115882518890",
+    "version": 2,
+    "identityHash": "eabac37825c5a9f7ace4194089d3533c",
     "entities": [
       {
         "tableName": "favorite_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `url` TEXT NOT NULL, `photographer` TEXT NOT NULL, `photographer_url` TEXT NOT NULL, `photographer_id` TEXT NOT NULL, `avg_color` TEXT NOT NULL, `original` TEXT NOT NULL, `medium` TEXT NOT NULL, `small` TEXT NOT NULL, `portrait` TEXT NOT NULL, `landscape` TEXT NOT NULL, `time` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `width` TEXT NOT NULL, `height` TEXT NOT NULL, `url` TEXT NOT NULL, `photographer` TEXT NOT NULL, `photographer_url` TEXT NOT NULL, `photographer_id` TEXT NOT NULL, `avg_color` TEXT NOT NULL, `original` TEXT NOT NULL, `medium` TEXT NOT NULL, `small` TEXT NOT NULL, `portrait` TEXT NOT NULL, `landscape` TEXT NOT NULL, `time` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
             "columnName": "id",
             "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "width",
+            "columnName": "width",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "height",
+            "columnName": "height",
+            "affinity": "TEXT",
             "notNull": true
           },
           {
@@ -94,7 +106,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e61d47e42dab2b9e2c07115882518890')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'eabac37825c5a9f7ace4194089d3533c')"
     ]
   }
 }

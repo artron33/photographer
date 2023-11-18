@@ -3,11 +3,12 @@ package com.pierre.photo.data.library.room
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.pierre.photo.ui.PhotographerApplication
+import com.pierre.photo.CONSTANTE.Companion.DB_NAME
+import com.pierre.photo.CONSTANTE.Companion.DB_VERSION
+import com.pierre.photo.presentation.PhotographerApplication
 
-private const val DB_NAME = "favorite_database"
 
-@Database(entities = [(Favorite::class)], version = 1)
+@Database(entities = [(FavoriteDataBase::class)], version = DB_VERSION)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun favoriteDao(): FavoriteDao

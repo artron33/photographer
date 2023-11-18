@@ -1,6 +1,5 @@
 package com.pierre.photo.data.library.retrofit
 
-import com.pierre.photo.data.photographer.PhotographerService
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

@@ -1,4 +1,3 @@
-
 <resources>
     <string name="app_name">Photo</string>
 
@@ -10,4 +9,15 @@
     <string name="search_query">Search %s</string>
     <string name="no_item_found">No item found</string>
     <string name="no_search_history">No search history</string>
+
+    <string name="empty_screen_title">Screen under construction</string>
+    <string name="empty_screen_subtitle">This screen is still under construction. This sample will help you learn about adaptive layouts in Jetpack Compose</string>
+
+    <string name="tab_favorite">Favorites</string>
+    <string name="tab_search">Search</string>
+    <string name="tab_account">Account</string>
+
+    <string name="navigation_drawer">navigation_drawer</string>
+    <string name="edit">edit</string>
+    <string name="compose">compose</string>
 </resources>

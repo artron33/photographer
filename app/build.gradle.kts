@@ -120,6 +120,8 @@ dependencies {
     testImplementation ("org.mockito:mockito-core:4.0.0")
     testImplementation ("org.mockito:mockito-inline:4.0.0")
     testImplementation ("org.mockito.kotlin:mockito-kotlin:4.0.0")
+    implementation ("androidx.paging:paging-compose:3.2.1")
+
 
     implementation ("androidx.room:room-runtime:2.6.0")
     annotationProcessor ("androidx.room:room-compiler:2.6.0")
