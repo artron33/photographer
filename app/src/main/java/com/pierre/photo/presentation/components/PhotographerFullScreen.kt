@@ -31,26 +31,28 @@ fun PhotographerFullScreen(
     photographer: PhotographerUi?,
     controlFavorite: (PhotographerUi) -> Unit,
 ) {
+    if (photographer == null) return
     Box {
         PhotographerImage(
-            photographer?.portrait ?: "",
+            photographer.portrait,
             "photographer name",
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(0.90f),
-            mockData = photographer?.resIdDrawableMock
+            mockData = photographer.resIdDrawableMock
         )
 
-        favoriteIcon(controlFavorite, photographer, Modifier
-            .padding(8.dp)
-            .clip(CircleShape)
-            .align(Alignment.TopEnd)
-            .background(MaterialTheme.colorScheme.surface)
+        favoriteIcon(
+            controlFavorite, photographer, Modifier
+                .padding(8.dp)
+                .clip(CircleShape)
+                .align(Alignment.TopEnd)
+                .background(MaterialTheme.colorScheme.surface)
         )
     }
 
     Text(
-        text = photographer?.photographer_url ?: "",
+        text = photographer.photographer_url,
         style = MaterialTheme.typography.bodyLarge,
         color = MaterialTheme.colorScheme.onSurface,
         modifier = Modifier.padding(top = 12.dp, start = 8.dp, end = 8.dp, bottom = 8.dp),
@@ -60,18 +62,18 @@ fun PhotographerFullScreen(
 @Composable
 fun favoriteIcon(
     controlFavorite: ((PhotographerUi) -> Unit)?,
-    photographer: PhotographerUi?,
+    photographer: PhotographerUi,
     modifier: Modifier
 ) {
-        val isAdded = photographer?.isFavorite ?: false
-        IconButton(
-            onClick = { controlFavorite?.let { it.invoke(photographer!!) } },
-            modifier = modifier
-        ) {
-            Icon(
-                imageVector = if (isAdded) Icons.Default.Star else Icons.Default.StarBorder,
-                contentDescription = "Favorite",
-                tint = MaterialTheme.colorScheme.outline
-            )
-        }
+    val isAdded = photographer.isFavorite
+    IconButton(
+        onClick = { controlFavorite?.let { it.invoke(photographer) } },
+        modifier = modifier
+    ) {
+        Icon(
+            imageVector = if (isAdded) Icons.Default.Star else Icons.Default.StarBorder,
+            contentDescription = "Favorite",
+            tint = MaterialTheme.colorScheme.outline
+        )
+    }
 }

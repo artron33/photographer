@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.paging.PagingData
 import com.google.accompanist.adaptive.calculateDisplayFeatures
+import com.pierre.photo.data.localmock.LocalPhotographersDataProvider
 import com.pierre.photo.presentation.screen.PhotoApp
 import com.pierre.photo.presentation.screen.PhotoViewModel
 import com.pierre.photo.presentation.screen.PhotographerUi
@@ -33,8 +34,8 @@ class MainActivity : ComponentActivity() {
                 val displayFeatures = calculateDisplayFeatures(this)
                 val uiState = viewModel.uiState
                 val uiDetailState = viewModel.uiDetailState
-                val photographerPagingItems: MutableStateFlow<PagingData<PhotographerUi>> = viewModel.photographerState
-                val favoritesPagingItems: MutableStateFlow<PagingData<PhotographerUi>> = viewModel.favoritesState
+                val photographerPagingItems = viewModel.photographerState
+                val favoritesPagingItems = viewModel.favoritesState
                 Log.e("yallah", "mainActivity.setContent")
 
                 PhotoApp(
@@ -62,11 +63,7 @@ fun PhotoAppPreview() {
         PhotoApp(
             windowSize = WindowSizeClass.calculateFromSize(DpSize(400.dp, 900.dp)),
             displayFeatures = emptyList(),
-
-//            photoUIState = PhotoUIState(
-//                favorites = LocalPhotographersDataProvider.photographers ,
-//                favoriteDetail = LocalPhotographersDataProvider.photographerDetail
-//            ),
+            listDataPlaceholder = LocalPhotographersDataProvider.photographers,
         )
     }
 }
@@ -79,11 +76,7 @@ fun PhotoAppPreviewTablet() {
         PhotoApp(
             windowSize = WindowSizeClass.calculateFromSize(DpSize(700.dp, 500.dp)),
             displayFeatures = emptyList(),
-
-//            photoUIState = PhotoUIState(
-//                favorites = LocalPhotographersDataProvider.photographers ,
-//                favoriteDetail = LocalPhotographersDataProvider.photographerDetail
-//            ),
+            listDataPlaceholder = LocalPhotographersDataProvider.photographers,
         )
     }
 }
@@ -96,11 +89,7 @@ fun PhotoAppPreviewTabletPortrait() {
         PhotoApp(
             windowSize = WindowSizeClass.calculateFromSize(DpSize(500.dp, 700.dp)),
             displayFeatures = emptyList(),
-
-//            photoUIState = PhotoUIState(
-//                favorites = LocalPhotographersDataProvider.photographers ,
-//                favoriteDetail = LocalPhotographersDataProvider.photographerDetail
-//            ),
+            listDataPlaceholder = LocalPhotographersDataProvider.photographers,
         )
     }
 }
@@ -113,11 +102,7 @@ fun PhotoAppPreviewDesktop() {
         PhotoApp(
             windowSize = WindowSizeClass.calculateFromSize(DpSize(1100.dp, 600.dp)),
             displayFeatures = emptyList(),
-
-//            photoUIState = PhotoUIState(
-//                favorites = LocalPhotographersDataProvider.photographers ,
-//                favoriteDetail = LocalPhotographersDataProvider.photographerDetail
-//            ),
+            listDataPlaceholder = LocalPhotographersDataProvider.photographers,
         )
     }
 }
@@ -130,11 +115,7 @@ fun PhotoAppPreviewDesktopPortrait() {
         PhotoApp(
             windowSize = WindowSizeClass.calculateFromSize(DpSize(600.dp, 1100.dp)),
             displayFeatures = emptyList(),
-
-//            photoUIState = PhotoUIState(
-//                favorites = LocalPhotographersDataProvider.photographers ,
-//                favoriteDetail = LocalPhotographersDataProvider.photographerDetail
-//            ),
+            listDataPlaceholder = LocalPhotographersDataProvider.photographers,
         )
     }
 }

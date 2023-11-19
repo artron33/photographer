@@ -98,6 +98,8 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
 
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.foundation)
+    implementation(libs.androidx.compose.foundation.layout)
     implementation("com.google.accompanist:accompanist-adaptive:0.26.2-beta")
 
     implementation(libs.androidx.compose.materialWindow)
@@ -122,6 +124,16 @@ dependencies {
     testImplementation ("org.mockito.kotlin:mockito-kotlin:4.0.0")
     implementation ("androidx.paging:paging-compose:3.2.1")
 
+    val compose_version= "1.5.4"
+    implementation("androidx.compose.ui:ui:$compose_version")
+    implementation("androidx.compose.material:material:$compose_version")
+    implementation("androidx.compose.ui:ui-tooling:$compose_version")
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
+    val navVersion = "2.6.0"
+    implementation("androidx.navigation:navigation-compose:$navVersion")
+
+
+    implementation("androidx.activity:activity-compose:1.8.0")
 
     implementation ("androidx.room:room-runtime:2.6.0")
     annotationProcessor ("androidx.room:room-compiler:2.6.0")

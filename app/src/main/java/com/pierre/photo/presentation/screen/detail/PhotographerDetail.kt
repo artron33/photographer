@@ -25,10 +25,10 @@ fun PhotographerDetail(
     controlFavorite: (PhotographerUi) -> Unit,
     openDetailScreen: (PhotographerUi?, Boolean) -> Unit,
     route: String,
-    isSearchingRoute: Boolean,
     placeholder: PhotoUIState? = null
 ) {
     val uiState = photoUIState?.collectAsStateWithLifecycle()?.value ?: placeholder!!
+    val isSearchingRoute = route == ReplyRoute.SEARCH
     val photographerDetail = if (isSearchingRoute) {
         uiState.searchDetail
     } else {
@@ -56,7 +56,6 @@ fun PhotographerDetailPreview() {
         controlFavorite = {},
         openDetailScreen = { _, _ -> },
         route = ReplyRoute.SEARCH,
-        isSearchingRoute = true,
         placeholder = PhotoUIState(
             searchDetail = photographerDetail,
             favoriteDetail = photographerDetail

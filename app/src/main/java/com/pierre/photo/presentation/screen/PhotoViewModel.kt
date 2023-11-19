@@ -16,6 +16,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -28,19 +29,17 @@ class PhotoViewModel(
 
     private var searchJob: Job? = null
 
-    private val _uiState = MutableStateFlow(PhotoUIState())
-    val uiState: StateFlow<PhotoUIState> = _uiState
+//    private val _uiState = MutableStateFlow(PhotoUIState())
+//    val uiState: StateFlow<PhotoUIState> = _uiState
 
     private val _uiDetailsState = MutableStateFlow(isDetailState())
     val uiDetailState: StateFlow<isDetailState> = _uiDetailsState
 
-    private val _photographerState: MutableStateFlow<PagingData<PhotographerUi>> =
-        MutableStateFlow(value = PagingData.empty())
-    val photographerState: MutableStateFlow<PagingData<PhotographerUi>> get() = _photographerState
+    private val _photographerState: MutableStateFlow<PagingData<PhotographerUi>> = MutableStateFlow(value = PagingData.empty())
+    val photographerState: StateFlow<PagingData<PhotographerUi>> = _photographerState
 
-    private val _favoritesState: MutableStateFlow<PagingData<PhotographerUi>> =
-        MutableStateFlow(value = PagingData.empty())
-    val favoritesState: MutableStateFlow<PagingData<PhotographerUi>> get() = _favoritesState
+    private val _favoritesState: MutableStateFlow<PagingData<PhotographerUi>> = MutableStateFlow(value = PagingData.empty())
+    val favoritesState: StateFlow<PagingData<PhotographerUi>> = _favoritesState
 
     init {
         fetchFavorite()
@@ -51,21 +50,35 @@ class PhotoViewModel(
         data.collect { favorites ->
             if (favorites == null) return@collect
 
-            _favoritesState.value = PagingData.from(favorites)
-            _photographerState.value = _photographerState.value.map { photographer ->
-                favorites.firstOrNull { it.id == photographer.id }.let {
-                    photographer.copy(isFavorite = it != null)
+            _favoritesState.update { PagingData.from(favorites) }
+//            _favoritesState.value = PagingData.from(favorites)
+
+            _photographerState.update {it.map { photographer ->
+                    favorites.firstOrNull { f-> f.id == photographer.id }.let { favorite ->
+                        photographer.copy(isFavorite = favorite != null)
+                    }
                 }
             }
+
+//            favorites.firstOrNull { it.id == _uiState.value.favoriteDetail?.id }.let {
+//                _uiState.value = _uiState.value.copy(
+//                    favoriteDetail = _uiState.value.favoriteDetail?.copy(isFavorite = it != null)
+//                )
+//            }
             favorites.firstOrNull { it.id == _uiState.value.favoriteDetail?.id }.let {
-                _uiState.value = _uiState.value.copy(
-                    favoriteDetail = _uiState.value.favoriteDetail?.copy(isFavorite = it != null)
-                )
+                _uiState.update {state->
+                    state.copy(favoriteDetail = state.favoriteDetail?.copy(isFavorite = it != null))
+                }
             }
+//            favorites.firstOrNull { it.id == _uiState.value.searchDetail?.id }.let {
+//                _uiState.value = _uiState.value.copy(
+//                    searchDetail = _uiState.value.searchDetail?.copy(isFavorite = it != null)
+//                )
+//            }
             favorites.firstOrNull { it.id == _uiState.value.searchDetail?.id }.let {
-                _uiState.value = _uiState.value.copy(
-                    searchDetail = _uiState.value.searchDetail?.copy(isFavorite = it != null)
-                )
+                _uiState.update { state ->
+                    state.copy(searchDetail = state.searchDetail?.copy(isFavorite = it != null))
+                }
             }
 
         }
@@ -94,13 +107,24 @@ class PhotoViewModel(
         }
     }
 
+    private val _uiState = MutableStateFlow(PhotoUIState())
+    val uiState: StateFlow<PhotoUIState> = _uiState
+
     fun openDetailScreen(photographer: PhotographerUi?, isSearchingRoute: Boolean) {
         if (isSearchingRoute) {
-            _uiState.value = _uiState.value.copy(searchDetail = photographer)
-            _uiDetailsState.value = _uiDetailsState.value.copy(isSearchOpen = photographer != null)
+//            _uiState.value = _uiState.value.copy(searchDetail = photographer)
+            _uiState.update { it.copy(searchDetail = photographer) }
+            _uiDetailsState.update { it.copy(isSearchOpen = photographer != null) }
+//            _uiDetailsState.value = _uiDetailsState.value.copy(isSearchOpen = photographer != null)
         } else {
-            _uiState.value = _uiState.value.copy(favoriteDetail = photographer)
-            _uiDetailsState.value = _uiDetailsState.value.copy(isFavoriteOpen = photographer != null)
+
+            /**  1-> Wrong  **/
+//            _uiState.value = _uiState.value.copy(favoriteDetail = photographer)
+//            _uiDetailsState.value = _uiDetailsState.value.copy(isFavoriteOpen = photographer != null)
+            /**  2-> Right  **/
+            _uiState.update { it.copy(favoriteDetail = photographer) }
+            _uiDetailsState.update { it.copy(isFavoriteOpen = photographer != null) }
+
         }
 
     }

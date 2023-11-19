@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -44,7 +43,6 @@ import com.pierre.photo.presentation.utils.ReplyNavigationType
 import com.pierre.photo.presentation.utils.isBookPosture
 import com.pierre.photo.presentation.utils.isSeparating
 import com.pierre.photo.presentation.screen.comingsoon.EmptyComingSoon
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
@@ -59,10 +57,12 @@ fun PhotoApp(
     openDetailScreen: (PhotographerUi?, Boolean) -> Unit = { _, _ -> },
     searchPhotoWith: (String) -> Unit = { _ -> },
     controlFavorite: (PhotographerUi) -> Unit = { },
-    photographerPagingItems: MutableStateFlow<PagingData<PhotographerUi>>? = null,
-    favoritesPagingItems: MutableStateFlow<PagingData<PhotographerUi>>? = null,
+    photographerPagingItems: StateFlow<PagingData<PhotographerUi>>? = null,
+    favoritesPagingItems: StateFlow<PagingData<PhotographerUi>>? = null,
     uiDetailState: StateFlow<isDetailState>?=null,
-) {
+    listDataPlaceholder: List<PhotographerUi>? = null,
+
+    ) {
 
     /**
      * This will help us select type of navigation and content type depending on window size and
@@ -138,18 +138,19 @@ fun PhotoApp(
     }
 
     PhotoNavigationWrapper(
-        navigationType = navigationType,
-        contentType = contentType,
-        displayFeatures = displayFeatures,
-        navigationContentPosition = navigationContentPosition,
         photoUIState = photoUIState,
-        uiDetailState = uiDetailState,
-        closeDetailScreen = closeDetailScreen,
         searchPhotoWith = searchPhotoWith,
         controlFavorite = controlFavorite,
         openDetailScreen = openDetailScreen,
+        displayFeatures = displayFeatures,
+        navigationType = navigationType,
+        contentType = contentType,
+        navigationContentPosition = navigationContentPosition,
+        closeDetailScreen = closeDetailScreen,
         photographerPagingItems = photographerPagingItems,
         favoritesPagingItems = favoritesPagingItems,
+        uiDetailState = uiDetailState,
+        listDataPlaceholder = listDataPlaceholder,
     )
 }
 
@@ -168,9 +169,10 @@ private fun PhotoNavigationWrapper(
     contentType: ReplyContentType,
     navigationContentPosition: ReplyNavigationContentPosition,
     closeDetailScreen: () -> Unit,
-    photographerPagingItems: MutableStateFlow<PagingData<PhotographerUi>>?,
-    favoritesPagingItems: MutableStateFlow<PagingData<PhotographerUi>>?,
+    photographerPagingItems: StateFlow<PagingData<PhotographerUi>>?,
+    favoritesPagingItems: StateFlow<PagingData<PhotographerUi>>?,
     uiDetailState: StateFlow<isDetailState>?,
+    listDataPlaceholder: List<PhotographerUi>?,
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -198,7 +200,6 @@ private fun PhotoNavigationWrapper(
                 displayFeatures = displayFeatures,
                 navigationContentPosition = navigationContentPosition,
                 photoUIState = photoUIState,
-                uiDetailState = uiDetailState,
                 navController = navController,
                 selectedDestination = selectedDestination,
                 navigateToTopLevelDestination = navigationActions::navigateTo,
@@ -208,6 +209,8 @@ private fun PhotoNavigationWrapper(
                 openDetailScreen = openDetailScreen,
                 photographerPagingItems = photographerPagingItems,
                 favoritesPagingItems = favoritesPagingItems,
+                uiDetailState = uiDetailState,
+                listDataPlaceholder = listDataPlaceholder,
             )
         }
     } else {
@@ -250,6 +253,7 @@ private fun PhotoNavigationWrapper(
                 photographerPagingItems = photographerPagingItems,
                 favoritesPagingItems = favoritesPagingItems,
                 uiDetailState = uiDetailState,
+                listDataPlaceholder = listDataPlaceholder,
             )
         }
     }
@@ -272,9 +276,10 @@ fun PhotoAppContent(
     controlFavorite: (PhotographerUi) -> Unit,
     openDetailScreen: (PhotographerUi?, Boolean) -> Unit,
     onDrawerClicked: () -> Unit = {},
-    photographerPagingItems: MutableStateFlow<PagingData<PhotographerUi>>? = null,
-    favoritesPagingItems: MutableStateFlow<PagingData<PhotographerUi>>?,
+    photographerPagingItems: StateFlow<PagingData<PhotographerUi>>? = null,
+    favoritesPagingItems: StateFlow<PagingData<PhotographerUi>>?,
     uiDetailState: StateFlow<isDetailState>?,
+    listDataPlaceholder: List<PhotographerUi>?,
 ) {
     Row(modifier = modifier.fillMaxSize()) {
         AnimatedVisibility(visible = navigationType == ReplyNavigationType.NAVIGATION_RAIL) {
@@ -303,6 +308,7 @@ fun PhotoAppContent(
                 openDetailScreen = openDetailScreen,
                 photographerPagingItems = photographerPagingItems,
                 favoritesPagingItems = favoritesPagingItems,
+                listDataPlaceholder = listDataPlaceholder,
             )
             AnimatedVisibility(visible = navigationType == ReplyNavigationType.BOTTOM_NAVIGATION) {
                 ReplyBottomNavigationBar(
@@ -325,9 +331,10 @@ private fun ReplyNavHost(
     searchPhotoWith: (String) -> Unit,
     controlFavorite: (PhotographerUi) -> Unit,
     openDetailScreen: (PhotographerUi?, Boolean) -> Unit,
-    photographerPagingItems: MutableStateFlow<PagingData<PhotographerUi>>?,
-    favoritesPagingItems: MutableStateFlow<PagingData<PhotographerUi>>?,
-    uiDetailState: StateFlow<isDetailState>?
+    photographerPagingItems: StateFlow<PagingData<PhotographerUi>>?,
+    favoritesPagingItems: StateFlow<PagingData<PhotographerUi>>?,
+    uiDetailState: StateFlow<isDetailState>?,
+    listDataPlaceholder: List<PhotographerUi>?
 ) {
     NavHost(
         modifier = modifier,
@@ -347,6 +354,7 @@ private fun ReplyNavHost(
                 openDetailScreen = openDetailScreen,
                 photographerPagingItems = photographerPagingItems,
                 favoritesPagingItems = favoritesPagingItems,
+                listDataPlaceholder = listDataPlaceholder
             )
         }
         composable(ReplyRoute.SEARCH) {
@@ -362,6 +370,7 @@ private fun ReplyNavHost(
                 photographerPagingItems = photographerPagingItems,
                 favoritesPagingItems = favoritesPagingItems,
                 uiDetailState = uiDetailState,
+                listDataPlaceholder = listDataPlaceholder
             )
         }
         composable(ReplyRoute.COMING_SOON) {
@@ -396,7 +405,7 @@ fun PhotoAppContentPreview() {
 //            isSearchOpen = false,
 //            isFavoriteOpen = false
 //        ),
-//        listDataPlaceholder = LocalPhotographersDataProvider.photographers,
+        listDataPlaceholder = LocalPhotographersDataProvider.photographers,
 //        emailLazyListState = rememberLazyListState()
     )
 

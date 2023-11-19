@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
@@ -38,12 +37,9 @@ fun PhotographerListItem(
 ) {
     Card(
         modifier = modifier
-            .padding(horizontal = 16.dp, vertical = 10.dp)
-            .height(300.dp)
             .fillMaxWidth()
             .clip(CardDefaults.shape)
             .combinedClickable(
-                //todo: verify this
                 onClick = { openDetailScreen(photographer, isSearchingRoute) },
             ),
         colors = CardDefaults.cardColors(
@@ -65,21 +61,20 @@ fun PhotographerListItem(
                     photographer.landscape,
                     "photographer.sender.fullName32",
                     modifier = Modifier
-                        .wrapContentHeight()
                         .fillMaxSize(),
                     mockData = photographer.resIdDrawableMock
                 )
-                    favoriteIcon(
-                        controlFavorite, photographer, Modifier
-                            .padding(8.dp)
-                            .clip(CircleShape)
-                            .align(Alignment.TopEnd)
-                            .background(MaterialTheme.colorScheme.surface)
-                    )
+                favoriteIcon(
+                    controlFavorite, photographer, Modifier
+                        .padding(8.dp)
+                        .clip(CircleShape)
+                        .align(Alignment.TopEnd)
+                        .background(MaterialTheme.colorScheme.surface)
+                )
             }
 
             Text(
-                text = photographer.photographer ,
+                text = photographer.photographer,
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.padding(top = 12.dp, start = 8.dp, end = 8.dp, bottom = 8.dp),

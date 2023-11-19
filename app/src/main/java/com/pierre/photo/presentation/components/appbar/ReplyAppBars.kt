@@ -46,6 +46,24 @@ import com.pierre.photo.presentation.screen.PhotographerUi
 import com.pierre.photo.presentation.screen.ReplySinglePaneContent
 import com.pierre.photo.presentation.screen.isDetailState
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+
+
+@Preview
+@Composable
+fun EmailDetailAppBarPreview() {
+    EmailDetailAppBar(
+        photographer = LocalPhotographersDataProvider.photographerDetail,
+        onBackPressed = {},
+    )
+
+}
+
+@Preview
+@Composable
+fun FavoriteAppBarPreview() {
+    FavoriteAppBar()
+}
 
 
 @Preview
@@ -54,7 +72,6 @@ fun PhotoDockedSearchBarPreview() {
     PhotoDockedSearchBar(
         photographers = null,
         onSearchItemSelected = {},
-        listDataPlaceholder = LocalPhotographersDataProvider.photographers,
     )
 
 }
@@ -62,10 +79,9 @@ fun PhotoDockedSearchBarPreview() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PhotoDockedSearchBar(
-    photographers: MutableStateFlow<PagingData<PhotographerUi>>? = null,
+    photographers: StateFlow<PagingData<PhotographerUi>>? = null,
     onSearchItemSelected: (String) -> Unit,
     modifier: Modifier = Modifier,
-    listDataPlaceholder: List<PhotographerUi>?
 ) {
     var query by remember { mutableStateOf("") }
     var active by remember { mutableStateOf(false) }
@@ -96,83 +112,68 @@ fun PhotoDockedSearchBar(
         },
         placeholder = {
             Text(
-                text = if (query.isBlank()) stringResource(id = R.string.search_here)
-                else stringResource(id = R.string.search_query, query)
+                text = if (query.isBlank()) stringResource(R.string.search_here)
+                else stringResource(R.string.search_query, query)
             )
         },
         leadingIcon = {
             Icon(
                 imageVector = Icons.Default.Search,
-                contentDescription = stringResource(id = R.string.search_description),
+                contentDescription = stringResource(R.string.search_description),
                 modifier = Modifier.padding(start = 16.dp),
             )
         },
     ) {
-//        if (photographers.isNotEmpty() && query.isNotEmpty()) {
         if (query.isNotEmpty()) {
-//            val lazyItems = photographers?.let {
-//                 it.collectAsLazyPagingItems()
-//            } ?: listDataPlaceholder
             val lazyItems = photographers?.collectAsLazyPagingItems()
             LazyColumn(
                 modifier = Modifier.fillMaxWidth(),
                 contentPadding = PaddingValues(16.dp),
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
+                if (lazyItems == null)  return@LazyColumn
                 isArrowBack = true
-                if (lazyItems != null) {
-                    items(lazyItems.itemCount, key = { lazyItems[it]?.id ?: 0 }) { index ->
-                        ListItem(
-                            headlineContent = {
-                                Text(
-                                    text = lazyItems[index]!!.photographer,
-                                    maxLines = 1
-                                )
-                            },
-                            supportingContent = {
-                                Text(
-                                    text = lazyItems[index]!!.photographer_url,
-                                    maxLines = 1
-                                )
-                            },
-                            leadingContent = {
-                                PhotographerImage(
-                                    drawableResource = lazyItems[index]!!.medium,
-                                    description = stringResource(id = R.string.image_description),
-                                    modifier = Modifier
-                                        .size(48.dp),
-                                    isRound = true,
-                                    mockData = lazyItems[index]!!.resIdDrawableMock
-                                )
-                            },
-                            modifier = Modifier.clickable {
-                                active = false
-                                onSearchItemSelected.invoke(query)
-                                query = ""
-                            }
-                        )
-                    }
+                items(lazyItems.itemCount, key = { lazyItems[it]?.id ?: 0 }) { index ->
+                    ListItem(
+                        headlineContent = {
+                            Text(
+                                text = lazyItems[index]!!.photographer,
+                                maxLines = 1
+                            )
+                        },
+                        supportingContent = {
+                            Text(
+                                text = lazyItems[index]!!.photographer_url,
+                                maxLines = 1
+                            )
+                        },
+                        leadingContent = {
+                            PhotographerImage(
+                                drawableResource = lazyItems[index]!!.medium,
+                                description = stringResource(R.string.image_description),
+                                modifier = Modifier
+                                    .size(48.dp),
+                                isRound = true,
+                                mockData = lazyItems[index]!!.resIdDrawableMock
+                            )
+                        },
+                        modifier = Modifier.clickable {
+                            active = false
+                            onSearchItemSelected.invoke(query)
+                            query = ""
+                        }
+                    )
                 }
             }
         } else if (query.isNotEmpty()) {
             Text(
-                text = stringResource(id = R.string.no_item_found),
+                text = stringResource(R.string.no_item_found),
                 modifier = Modifier.padding(16.dp)
             )
         }
     }
 }
 
-
-@Preview
-@Composable
-fun EmailDetailAppBarPreview() {
-    EmailDetailAppBar(
-        photographer = LocalPhotographersDataProvider.photographerDetail,
-        onBackPressed = {},
-    )
-
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -181,6 +182,7 @@ fun EmailDetailAppBar(
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit
 ) {
+    if (photographer == null) return
     TopAppBar(
         modifier = modifier,
         colors = TopAppBarDefaults.topAppBarColors(
@@ -192,7 +194,7 @@ fun EmailDetailAppBar(
                 horizontalAlignment = Alignment.Start
             ) {
                 Text(
-                    text = photographer?.photographer ?: "",
+                    text = photographer.photographer,
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -209,20 +211,11 @@ fun EmailDetailAppBar(
             ) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
-                    contentDescription = stringResource(id = R.string.back_button),
+                    contentDescription = stringResource(R.string.back_button),
                     modifier = Modifier.size(14.dp)
                 )
             }
         },
-    )
-}
-
-
-@Preview
-@Composable
-fun FavoriteAppBarPreview() {
-    FavoriteAppBar(
-
     )
 }
 
@@ -243,7 +236,7 @@ fun FavoriteAppBar(
             ) {
                 Text(
                     modifier = modifier.padding(end = 8.dp),
-                    text = "Favorite", // todo toString ress
+                    text = stringResource(R.string.tab_favorite), // todo toString ress
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -252,7 +245,7 @@ fun FavoriteAppBar(
         navigationIcon = {
             Image(
                 imageVector = Icons.Default.Star,
-                contentDescription = stringResource(id = R.string.back_button),
+                contentDescription = stringResource(R.string.back_button),
                 modifier = Modifier
                     .padding(start = 16.dp)
                     .size(24.dp)

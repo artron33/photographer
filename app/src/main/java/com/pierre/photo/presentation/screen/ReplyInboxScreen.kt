@@ -1,5 +1,6 @@
 package com.pierre.photo.presentation.screen
 
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,7 +23,6 @@ import com.google.accompanist.adaptive.TwoPane
 import com.pierre.photo.data.localmock.LocalPhotographersDataProvider
 import com.pierre.photo.presentation.screen.detail.PhotographerDetail
 import com.pierre.photo.presentation.screen.list.PhotographerList
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -37,8 +37,8 @@ fun ReplyInboxScreen(
     searchPhotoWith: (String) -> Unit,
     controlFavorite: (PhotographerUi) -> Unit,
     openDetailScreen: (PhotographerUi?, Boolean) -> Unit,
-    photographerPagingItems: MutableStateFlow<PagingData<PhotographerUi>>?,
-    favoritesPagingItems: MutableStateFlow<PagingData<PhotographerUi>>?,
+    photographerPagingItems: StateFlow<PagingData<PhotographerUi>>?,
+    favoritesPagingItems: StateFlow<PagingData<PhotographerUi>>?,
     uiDetailState: StateFlow<isDetailState>?,
     photoUiStatePlaceholder: PhotoUIState? = null,
     isDetailPlaceholder: isDetailState? = null,
@@ -76,30 +76,13 @@ fun ReplyInboxScreen(
                 )
             },
             second = {
-                val isSearchingRoute = route == ReplyRoute.SEARCH
-//                val uiState = photoUIState?.let {
-                val photographerDetail = photoUIState?.let {
-                    val temp by it.collectAsStateWithLifecycle()
-//                    val photographerDetail =
-                        if (isSearchingRoute) {
-                        temp.searchDetail
-                    } else {
-                        temp.favoriteDetail
-                    }
-                } ?: LocalPhotographersDataProvider.photographerDetail
-
-                if (photographerDetail != null) {
-                    PhotographerDetail(
-//                        photographer = photographerDetail,
-                        photoUIState = photoUIState,
-                        modifier = modifier,
-                        controlFavorite = controlFavorite,
-                        openDetailScreen = openDetailScreen,
-                        route = route,
-                        isSearchingRoute = isSearchingRoute
-                    )
-                }
-
+                PhotographerDetail(
+                    photoUIState = photoUIState,
+                    modifier = modifier,
+                    controlFavorite = controlFavorite,
+                    openDetailScreen = openDetailScreen,
+                    route = route
+                )
             },
             strategy = HorizontalTwoPaneStrategy(splitFraction = 0.5f, gapWidth = 16.dp),
             displayFeatures = displayFeatures
@@ -137,13 +120,12 @@ fun ReplySinglePaneContent(
     controlFavorite: (PhotographerUi) -> Unit,
     openDetailScreen: (PhotographerUi?, Boolean) -> Unit,
     route: String,
-    photographerPagingItems: MutableStateFlow<PagingData<PhotographerUi>>?,
-    favoritesPagingItems: MutableStateFlow<PagingData<PhotographerUi>>?,
+    photographerPagingItems: StateFlow<PagingData<PhotographerUi>>?,
+    favoritesPagingItems: StateFlow<PagingData<PhotographerUi>>?,
     photoUiStatePlaceholder: PhotoUIState? = null,
     isDetailPlaceholder: isDetailState? = null,
     listDataPlaceholder: List<PhotographerUi>? = null,
 ) {
-
     val isSearchingRoute = route == ReplyRoute.SEARCH
     val photographerMain = if (isSearchingRoute) {
         photographerPagingItems
@@ -165,7 +147,6 @@ fun ReplySinglePaneContent(
         }
         PhotographerDetail(
             photoUIState = photoUIState,
-            isSearchingRoute = isSearchingRoute,
             modifier = modifier,
             controlFavorite = controlFavorite,
             openDetailScreen = openDetailScreen,
@@ -227,9 +208,7 @@ fun ReplySinglePanePreview() {
         photoUIState = null,
         controlFavorite = {},
         openDetailScreen = { _, _ -> },
-//        contentType = ReplyContentType.SINGLE_PANE,
         uiDetailState = null,
-//        displayFeatures = emptyList(),
         closeDetailScreen = {},
         searchPhotoWith = {},
         photographerPagingItems = null,
